@@ -2,14 +2,6 @@ pandas
 numpy
 networkit
 networkx
-copy
-sys
-math
-datetime
-scipy
-dateutil
 matplotlib
-time
-os
-networkit
-networkx
+click
+typing
