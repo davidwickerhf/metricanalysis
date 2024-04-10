@@ -8,6 +8,7 @@ import numpy as np
 class Metric(abc.ABC):
     """
     Abstract metric class to be inherited by all metrics.
+    All the metrics should inherit from this class
 
     Args:
         abc (_type_): _description_
