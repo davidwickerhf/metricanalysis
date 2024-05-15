@@ -113,9 +113,17 @@ class CentralityCalculator:
         Returns:
         dict: Dictionary of nodes with forest closeness centrality as values.
         """
-        # Placeholder for actual implementation
-        # This is a complex measure not natively supported by NetworkX
-        return {}
+        if nx.is_directed(G):
+            subgraphs = [G.subgraph(c).copy() for c in nx.weakly_connected_components(G)]
+        else:
+            subgraphs = [G.subgraph(c).copy() for c in nx.connected_components(G)]
+        
+        forest_closeness = {}
+        for subgraph in subgraphs:
+            closeness = nx.closeness_centrality(subgraph)
+            forest_closeness.update(closeness)
+        
+        return forest_closeness
 
     def calculate_hits(self, G):
         """
@@ -140,9 +148,34 @@ class CentralityCalculator:
         Returns:
         dict: Dictionary of nodes with trophic level as values.
         """
-        # Placeholder for actual implementation
-        # This is a specific measure from ecology
-        return {}
+        # Initialize trophic levels
+        trophic_levels = {node: None for node in G.nodes()}
+
+        # Identify source nodes (nodes with no incoming edges)
+        source_nodes = [node for node in G.nodes() if G.in_degree(node) == 0]
+
+        # Initialize source nodes with trophic level 1
+        for node in source_nodes:
+            trophic_levels[node] = 1
+
+        # Function to calculate the trophic level of a node
+        def compute_trophic_level(node):
+            if trophic_levels[node] is not None:
+                return trophic_levels[node]
+            
+            predecessors = list(G.predecessors(node))
+            if not predecessors:
+                trophic_levels[node] = 1
+            else:
+                trophic_levels[node] = 1 + sum(compute_trophic_level(pred) for pred in predecessors) / len(predecessors)
+            
+            return trophic_levels[node]
+
+        # Calculate trophic levels for all nodes
+        for node in G.nodes():
+            compute_trophic_level(node)
+
+        return trophic_levels
 
     def calculate_betweenness_centrality(self, G):
         """

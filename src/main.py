@@ -1,5 +1,6 @@
 import sys
 import os
+import networkx as nx
 
 # Add the src directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -43,6 +44,9 @@ def main():
     # Step 2: Graph Construction
     graph_builder = GraphBuilder()
     G = graph_builder.create_graph(nodes_df, edges_df)
+
+    # Remove self-loops
+    G.remove_edges_from(nx.selfloop_edges(G))
 
     # Step 3: Centrality Calculation
     centrality_calculator = CentralityCalculator()
