@@ -175,14 +175,23 @@ def main():
 
     # Step 5: Visualization
     logger.info("Step 5: Visualization")
-    timer.start()
-    plot_generator = PlotGenerator()
-    plot_generator.plot_centrality_distribution(nodes_df, 'degree_centrality')
-    plot_generator.plot_correlation_matrix(correlation_matrix)
 
-    error_bar_plotter = ErrorBarPlotter()
-    error_bar_plotter.plot_error_bars(nodes_df, 'degree_centrality', 'originatingbody')
-    timer.stop("Visualization")
+    if not os.path.exists('plots'):
+        os.makedirs('plots')
+        
+    plot_generator = PlotGenerator()
+
+    for centrality in centrality_columns:
+        try:
+            importance_output_path = f'plots/{centrality}_vs_importance.png'
+            plot_generator.plot_correlation(nodes_df, centrality, 'importance', importance_output_path)
+
+            branch_output_path = f'plots/{centrality}_vs_court_branch.png'
+            plot_generator.plot_correlation(nodes_df, centrality, 'court_branch', branch_output_path)
+
+        except Exception as e:
+            logger.error(f"Failed to plot correlation for {centrality}: {e}")
+
 
 if __name__ == "__main__":
     main()
