@@ -96,12 +96,40 @@ class CentralityCalculator:
         Calculates the current flow betweenness centrality for each node in the graph.
 
         Parameters:
-        G (networkx.DiGraph): The graph to analyze.
+        G (networkx.Graph or networkx.DiGraph): The graph to analyze.
 
         Returns:
         dict: Dictionary of nodes with current flow betweenness centrality as values.
         """
-        return current_flow_betweenness_centrality(G)
+        if nx.is_directed(G):
+            # Convert directed graph to undirected graph
+            undirected_G = G.to_undirected()
+        else:
+            undirected_G = G
+
+        centrality = {}
+
+        # Check for connected components
+        if not nx.is_connected(undirected_G):
+            for component in nx.connected_components(undirected_G):
+                subgraph = undirected_G.subgraph(component)
+                if subgraph.number_of_edges() > 0:  # Skip components without edges
+                    try:
+                        subgraph_centrality = current_flow_betweenness_centrality(subgraph)
+                        centrality.update(subgraph_centrality)
+                    except ZeroDivisionError:
+                        # Handle the case where division by zero might occur
+                        for node in subgraph.nodes():
+                            centrality[node] = 0.0
+        else:
+            try:
+                centrality = current_flow_betweenness_centrality(undirected_G)
+            except ZeroDivisionError:
+                # Handle the case where division by zero might occur
+                for node in undirected_G.nodes():
+                    centrality[node] = 0.0
+
+        return {node: centrality.get(node, 0.0) for node in G.nodes()}
 
     def calculate_forest_closeness_centrality(self, G):
         """
@@ -158,22 +186,21 @@ class CentralityCalculator:
         for node in source_nodes:
             trophic_levels[node] = 1
 
-        # Function to calculate the trophic level of a node
-        def compute_trophic_level(node):
-            if trophic_levels[node] is not None:
-                return trophic_levels[node]
-            
-            predecessors = list(G.predecessors(node))
-            if not predecessors:
-                trophic_levels[node] = 1
-            else:
-                trophic_levels[node] = 1 + sum(compute_trophic_level(pred) for pred in predecessors) / len(predecessors)
-            
-            return trophic_levels[node]
+        # Perform topological sort of the graph
+        try:
+            topo_sorted_nodes = list(nx.topological_sort(G))
+        except nx.NetworkXUnfeasible:
+            # If the graph has a cycle, raise an error
+            raise ValueError("Graph has at least one cycle, which prevents the calculation of trophic levels")
 
-        # Calculate trophic levels for all nodes
-        for node in G.nodes():
-            compute_trophic_level(node)
+        # Calculate the trophic level for each node
+        for node in topo_sorted_nodes:
+            if trophic_levels[node] is None:
+                predecessors = list(G.predecessors(node))
+                if not predecessors:
+                    trophic_levels[node] = 1
+                else:
+                    trophic_levels[node] = 1 + sum(trophic_levels[pred] for pred in predecessors) / len(predecessors)
 
         return trophic_levels
 
