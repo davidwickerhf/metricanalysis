@@ -8,7 +8,7 @@ Metrics Tool is a Python package and CLI (Command-Line Interface) tool designed 
 
 - **Custom Metric Evaluation:** Apply and test custom graph metrics on your datasets.
 - **Ground Truth Comparison:** Analyze the performance of graph metrics by comparing them with ground truths.
-- **CLI and Library Support:** Use Metrics Tool as a command-line tool or as a Python library in your projects.
+- **Library Support:** Use Metrics Tool as a command-line tool or as a Python library in your projects.
 - **Extensive Documentation:** Get started quickly with our detailed guides and examples.
 
 ## Supported Metrics
@@ -37,43 +37,15 @@ The Metrics Tool currently supports the following metrics:
 ## File Structure
 
 - **edges.csv**: This file contains two columns: `ecli` and `references`. Each row represents an edge, with `ecli` indicating the case identifier and `references` being a list of case identifiers that the `ecli` case references.
-  
+
   Example row: `ECLI:CE:ECHR:1968:0627JUD000193663,"['ECLI:CE:ECHR:1960:1114JUD000033257', 'ECLI:CE:ECHR:1961:0701JUD000033257', 'ECLI:CE:ECHR:1961:0407JUD000033257']"`
 
 - **nodes.csv**: This file contains details about each node. The columns are as follows: `ecli`, `itemid`, `appno`, `article`, `conclusion`, `docname`, `doctype`, `doctypebranch`, `importance`, `judgementdate`, `languageisocode`, `originatingbody`, `violation`, `nonviolation`, `extractedappno`, `scl`.
 
 - **ground_truths.csv**: The structure for this file should include the ground truths against which the metrics will be compared. The structure depends on what ground truths are required for the supported metrics.
 
-## Project Folder Structure
-
-The project is organized into the following structure:
-
-- **.env/**: Environment configuration files for local development.
-- **docs/**: Documentation files and additional resources.
-- **metrics/**:
-  - **cli/**:
-    - **metrics.py**: The CLI interface for running the tool.
-  - **functions/**:
-    - **metric.py**: Function definitions for each metric supported by the tool.
-  - **util/**:
-    - **timer.py**: Utility functions for timing and performance measurement.
-    - **__init__.py**: Initializes the `metrics` package.
-- **tests/**: Contains unit tests for each metric and utility function.
-- **.gitattributes**: Git configuration file for handling repository attributes.
-- **.gitignore**: Specifies intentionally untracked files to ignore.
-- **LICENSE**: The full license text.
-- **README.md**: The file you are currently reading.
-- **requirements.txt**: Lists all Python dependencies.
-- **setup.py**: Configuration for packaging and distributing the tool.
-
-## Future TO-Dos
-
-- **Improve Documentation**: Continually update and expand the documentation to cover all aspects of the tool, including more detailed usage examples.
-- **Add Unit Testing**: Develop a comprehensive suite of unit tests to ensure each metric's accuracy and reliability.
-- **Add Support for Custom Metrics and Ground Truths**: Implement a flexible system to allow users to define and
-
- integrate their custom metrics and ground truths into the tool.
-
+- **Extend Unit Testing**: Develop a comprehensive suite of unit tests to ensure each metric's accuracy and reliability.
+- **Add Support for Custom Metrics and Ground Truths**: Implement a flexible system to allow users to define and integrate their custom metrics and ground truths into the tool.
 
 ## Installation
 
@@ -85,45 +57,29 @@ pip install metricstool
 
 ## Quick Start
 
-### As a CLI Tool
-
-1. **Prepare Your Datasets:** Ensure you have two CSV files: one for nodes and another for edges. 
-
-    Example:
-    - `nodes.csv`: Contains the nodes of your graph.
-    - `edges.csv`: Contains the edges connecting the nodes in your graph.
-
-2. **Run Metrics Tool:** Use the following command to run Metrics Tool against your datasets.
-
-    ```bash
-    metricstool --nodes nodes.csv --edges edges.csv --metrics your_metric --ground-truths ground_truths.csv
-    ```
-
-    Replace `your_metric` with the metric you wish to test and `ground_truths.csv` with the path to your ground truths file.
-
 ### As a Python Package
 
 1. **Import Metrics Tool:**
 
-    ```python
-    from metricstool import MetricsTool
-    ```
+   ```python
+   from metricstool import MetricsTool
+   ```
 
 2. **Load Your Datasets:**
 
-    ```python
-    nodes_path = 'path/to/nodes.csv'
-    edges_path = 'path/to/edges.csv'
-    ground_truths_path = 'path/to/ground_truths.csv'
-    ```
+   ```python
+   nodes_path = 'path/to/nodes.csv'
+   edges_path = 'path/to/edges.csv'
+   ground_truths_path = 'path/to/ground_truths.csv'
+   ```
 
 3. **Initialize and Run Metrics Tool:**
 
-    ```python
-    mt = MetricsTool(nodes_path, edges_path)
-    results = mt.evaluate_metric('your_metric', ground_truths_path)
-    print(results)
-    ```
+   ```python
+   mt = MetricsTool(nodes_path, edges_path)
+   results = mt.evaluate_metric('your_metric', ground_truths_path)
+   print(results)
+   ```
 
 ## Documentation
 
