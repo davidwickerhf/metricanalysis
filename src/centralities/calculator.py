@@ -1,6 +1,17 @@
 import networkx as nx
 import numpy as np
-from networkx.algorithms.centrality import current_flow_betweenness_centrality, current_flow_closeness_centrality, hits
+from networkx.algorithms.centrality import (
+    degree_centrality,
+    betweenness_centrality,
+    closeness_centrality,
+    eigenvector_centrality_numpy,
+    harmonic_centrality,
+    current_flow_betweenness_centrality,
+    current_flow_closeness_centrality,
+)
+from networkx.algorithms.link_analysis.hits_alg import hits
+from networkx.algorithms.link_analysis.pagerank_alg import pagerank
+
 from scipy.sparse.linalg import eigs
 
 class CentralityCalculator:

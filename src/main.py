@@ -1,12 +1,18 @@
-from src.data_ingestion.reader import FileReader
-from src.data_ingestion.cleaner import DataCleaner
-from src.graph.builder import GraphBuilder
-from src.centralities.calculator import CentralityCalculator
-from src.correlation.correlation import CorrelationAnalyzer
-from src.correlation.composite_score import CompositeScoreCalculator
-from src.correlation.regression import RegressionModel
-from src.visualization.plot import PlotGenerator
-from src.visualization.error_bar import ErrorBarPlotter
+import sys
+import os
+
+# Add the src directory to the path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+from data_ingestion.reader import FileReader
+from data_ingestion.cleaner import DataCleaner
+from graph.builder import GraphBuilder
+from centralities.calculator import CentralityCalculator
+from correlation.correlation import CorrelationAnalyzer
+from correlation.composite_score import CompositeScoreCalculator
+from correlation.regression import RegressionModel
+from visualization.plot import PlotGenerator
+from visualization.error_bar import ErrorBarPlotter
 
 def main():
     """Main function to orchestrate the graph analysis tool workflow."""
@@ -15,10 +21,20 @@ def main():
     nodes_df = file_reader.read_json('data/raw/nodes_p1.json')
     edges_df = file_reader.read_json('data/raw/edges_p1.json')
 
+    # Print the contents and columns of nodes_df to debug the KeyError
+    print("Nodes DataFrame:")
+    print(nodes_df.head())
+    print(nodes_df.columns)
+
+    # Print the contents and columns of edges_df to debug the KeyError
+    print("Edges DataFrame:")
+    print(edges_df.head())
+    print(edges_df.columns)
+
     data_cleaner = DataCleaner()
     nodes_df = data_cleaner.remove_communicated_cases(nodes_df)
-    p1_eclis = set(nodes_df['ECLI'])
-    edges_df = data_cleaner.filter_targets(edges_df, p1_eclis)
+    p1_eclis = set(nodes_df['ecli'])  # Adjusted to use the correct key
+    edges_df = data_cleaner.filter_targets(edges_df, p1_eclis)  # Adjusted to use the correct key
 
     # Save processed data
     nodes_df.to_excel('data/processed/processed_nodes.xlsx', index=False)
@@ -52,7 +68,7 @@ def main():
     }
 
     for measure_name, measure_values in centrality_measures.items():
-        nodes_df[measure_name] = nodes_df['ECLI'].map(measure_values)
+        nodes_df[measure_name] = nodes_df['ecli'].map(measure_values)  # Adjusted to use the correct key
 
     # Step 4: Analysis and Correlation
     correlation_analyzer = CorrelationAnalyzer()
@@ -63,7 +79,7 @@ def main():
     nodes_df = composite_calculator.create_composite_score(nodes_df, centrality_columns)
 
     regression_model = RegressionModel()
-    regression_results = regression_model.perform_regression(nodes_df, 'importance_score')
+    regression_results = regression_model.perform_regression(nodes_df, 'importance')
 
     # Step 5: Visualization
     plot_generator = PlotGenerator()
@@ -71,7 +87,7 @@ def main():
     plot_generator.plot_correlation_matrix(correlation_matrix)
 
     error_bar_plotter = ErrorBarPlotter()
-    error_bar_plotter.plot_error_bars(nodes_df, 'degree_centrality', 'court_branch')
+    error_bar_plotter.plot_error_bars(nodes_df, 'degree_centrality', 'originatingbody')
 
 if __name__ == "__main__":
     main()

@@ -16,7 +16,8 @@ class GraphBuilder:
         """
         G = nx.DiGraph()
         for _, row in nodes_df.iterrows():
-            G.add_node(row['ECLI'], **row.to_dict())
+            G.add_node(row['ecli'], **row.to_dict())
         for _, row in edges_df.iterrows():
             G.add_edge(row['source'], row['target'])
         return G
+
