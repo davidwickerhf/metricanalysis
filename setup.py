@@ -1,26 +1,29 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='metrics',
+    name='graph_analysis_tool',
     version='0.1',
     packages=find_packages(),
-    include_package_data=True,
     install_requires=[
-        # Add your project dependencies here
-        'click',
         'pandas',
-        'numpy',
-        'matplotlib',
         'networkx',
-        'networkit',
+        'matplotlib',
+        'seaborn',
+        'scikit-learn',
+        'jupyter'
     ],
     entry_points={
         'console_scripts': [
-            'metrics=metrics.cli.metrics:cli',
+            'graph_analysis_tool=src.main:main',
         ],
     },
     author='David Henry Francis Wicker',
     author_email='david.wicker@maastrichtuniversity.nl',
-    description='Tool to streamline testing and analysis of node centrality metrics',
-    url='https://github.com/davidwickerhf/metricanalysis',
+    description='A tool for analyzing legal citation networks',
+    url='https://github.com/davidwickerhf/metrics',
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+    ],
 )

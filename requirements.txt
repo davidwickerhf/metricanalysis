@@ -1,7 +1,6 @@
 pandas
-numpy
-networkit
 networkx
 matplotlib
-click
-typing
+seaborn
+scikit-learn
+jupyter
