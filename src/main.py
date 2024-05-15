@@ -30,20 +30,37 @@ def main():
 
     # Step 3: Centrality Calculation
     centrality_calculator = CentralityCalculator()
-    degree_centrality = centrality_calculator.calculate_degree_centrality(G)
-    betweenness_centrality = centrality_calculator.calculate_betweenness_centrality(G)
-    # Add more centrality measures as needed
+    centrality_measures = {
+        'degree_centrality': centrality_calculator.calculate_degree_centrality(G),
+        'in_degree_centrality': centrality_calculator.calculate_in_degree_centrality(G),
+        'core_number': centrality_calculator.calculate_core_number(G),
+        'relative_in_degree_centrality': centrality_calculator.calculate_relative_in_degree_centrality(G),
+        'eigenvector_centrality': centrality_calculator.calculate_eigenvector_centrality(G),
+        'pagerank': centrality_calculator.calculate_pagerank(G),
+        'current_flow_betweenness_centrality': centrality_calculator.calculate_current_flow_betweenness_centrality(G),
+        'forest_closeness_centrality': centrality_calculator.calculate_forest_closeness_centrality(G),
+        'hits': centrality_calculator.calculate_hits(G),
+        'trophic_level': centrality_calculator.calculate_trophic_level(G),
+        'betweenness_centrality': centrality_calculator.calculate_betweenness_centrality(G),
+        'current_flow_closeness_centrality': centrality_calculator.calculate_current_flow_closeness_centrality(G),
+        'out_degree_centrality': centrality_calculator.calculate_out_degree_centrality(G),
+        'hub_centrality': centrality_calculator.calculate_hub_centrality(G),
+        'authority_centrality': centrality_calculator.calculate_authority_centrality(G),
+        'harmonic_centrality': centrality_calculator.calculate_harmonic_centrality(G),
+        'disruption': centrality_calculator.calculate_disruption(G),
+        'closeness_centrality': centrality_calculator.calculate_closeness_centrality(G),
+    }
 
-    # Add centrality measures to nodes_df
-    nodes_df['degree_centrality'] = nodes_df['ECLI'].map(degree_centrality)
-    nodes_df['betweenness_centrality'] = nodes_df['ECLI'].map(betweenness_centrality)
+    for measure_name, measure_values in centrality_measures.items():
+        nodes_df[measure_name] = nodes_df['ECLI'].map(measure_values)
 
     # Step 4: Analysis and Correlation
     correlation_analyzer = CorrelationAnalyzer()
-    correlation_matrix = correlation_analyzer.compute_correlations(nodes_df, ['degree_centrality', 'betweenness_centrality'])
+    centrality_columns = list(centrality_measures.keys())
+    correlation_matrix = correlation_analyzer.compute_correlations(nodes_df, centrality_columns)
 
     composite_calculator = CompositeScoreCalculator()
-    nodes_df = composite_calculator.create_composite_score(nodes_df, ['degree_centrality', 'betweenness_centrality'])
+    nodes_df = composite_calculator.create_composite_score(nodes_df, centrality_columns)
 
     regression_model = RegressionModel()
     regression_results = regression_model.perform_regression(nodes_df, 'importance_score')
