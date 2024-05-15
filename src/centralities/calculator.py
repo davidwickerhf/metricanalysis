@@ -153,19 +153,6 @@ class CentralityCalculator:
         
         return forest_closeness
 
-    def calculate_hits(self, G):
-        """
-        Calculates the HITS algorithm (hubs and authorities) for each node in the graph.
-
-        Parameters:
-        G (networkx.DiGraph): The graph to analyze.
-
-        Returns:
-        tuple: Two dictionaries of nodes with hubs and authorities scores as values.
-        """
-        hubs, authorities = hits(G)
-        return hubs, authorities
-
     def calculate_trophic_level(self, G):
         """
         Calculates the trophic level for each node in the graph.

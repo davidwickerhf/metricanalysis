@@ -2,6 +2,7 @@ import sys
 import os
 import time
 import networkx as nx
+import pandas as pd
 
 
 
@@ -83,7 +84,6 @@ def main():
         ('pagerank', centrality_calculator.calculate_pagerank),
         ('current_flow_betweenness_centrality', centrality_calculator.calculate_current_flow_betweenness_centrality),
         ('forest_closeness_centrality', centrality_calculator.calculate_forest_closeness_centrality),
-        ('hits', centrality_calculator.calculate_hits),
         ('trophic_level', centrality_calculator.calculate_trophic_level),
         ('betweenness_centrality', centrality_calculator.calculate_betweenness_centrality),
         ('current_flow_closeness_centrality', centrality_calculator.calculate_current_flow_closeness_centrality),
@@ -98,30 +98,80 @@ def main():
     for name, func in calculators:
         try:
             logger.info(f"Calculating {name}...")
-            centrality_measures[name] = func(G)
+            measure_values = func(G)
+            centrality_measures[name] = measure_values
             log_time_and_progress(f"Finished calculating {name}")
         except Exception as e:
             logger.error(f"Failed to calculate {name}: {e}")
 
     logger.info("All centrality calculations completed")
 
-
+    # Adding the centrality measures to the nodes DataFrame
     for measure_name, measure_values in centrality_measures.items():
-        nodes_df[measure_name] = nodes_df['ecli'].map(measure_values)  # Adjusted to use the correct key
+        try:
+            logger.info(f"Mapping {measure_name} to nodes DataFrame")
+            nodes_df[measure_name] = nodes_df['ecli'].map(measure_values)  # Ensure measure_values is a dictionary
+        except Exception as e:
+            logger.error(f"Failed to map {measure_name} to nodes DataFrame: {e}")
 
-    # Step 4: Analysis and Correlation
-    logger.info("Step 4: Analysis and Correlation")
-    timer.start()
+    # Save the updated DataFrame
+    nodes_df.to_excel('data/processed/processed_nodes.xlsx', index=False)
+    logger.info("Saved the processed nodes DataFrame to Excel")
+
+    # Correlation analysis
     correlation_analyzer = CorrelationAnalyzer()
-    centrality_columns = list(centrality_measures.keys())
-    correlation_matrix = correlation_analyzer.compute_correlations(nodes_df, centrality_columns)
+    centrality_columns = [col for col in nodes_df.columns if col not in ['ecli', 'court_branch', 'importance']]
+    
+    try:
+        correlation_matrix = correlation_analyzer.compute_correlations(nodes_df, centrality_columns)
+        correlation_matrix.to_excel('data/processed/correlation_matrix.xlsx')
+        logger.info("Correlation matrix computed and saved.")
+    except Exception as e:
+        logger.error(f"Failed to compute correlation matrix: {e}")
 
-    composite_calculator = CompositeScoreCalculator()
-    nodes_df = composite_calculator.create_composite_score(nodes_df, centrality_columns)
+    # Correlation with importance
+    try:
+        importance_correlations = correlation_analyzer.compute_importance_correlations(nodes_df, centrality_columns)
+        importance_correlations.to_excel('data/processed/importance_correlations.xlsx')
+        logger.info("Importance correlations computed and saved.")
+    except Exception as e:
+        logger.error(f"Failed to compute importance correlations: {e}")
 
-    regression_model = RegressionModel()
-    regression_results = regression_model.perform_regression(nodes_df, 'importance')
-    timer.stop("Analysis and Correlation")
+    # Correlation with court branch
+    try:
+        court_branch_correlations = correlation_analyzer.compute_court_branch_correlations(nodes_df, centrality_columns)
+        court_branch_correlations.to_excel('data/processed/court_branch_correlations.xlsx')
+        logger.info("Court branch correlations computed and saved.")
+    except Exception as e:
+        logger.error(f"Failed to compute court branch correlations: {e}")
+
+    # Select numeric columns for regression analysis
+    numeric_df = nodes_df.select_dtypes(include=[float, int])
+
+    # Check if the target column 'importance' is numeric
+    if 'importance' not in numeric_df.columns:
+        try:
+            numeric_df['importance'] = pd.to_numeric(nodes_df['importance'], errors='coerce')
+        except Exception as e:
+            logger.error(f"Failed to convert 'importance' to numeric: {e}")
+            return
+
+    # Drop rows with NaN values in the target column
+    numeric_df = numeric_df.dropna(subset=['importance'])
+
+    # Save the processed nodes data
+    try:
+        nodes_df.to_excel('data/processed/processed_nodes.xlsx', index=False)
+        logger.info("Processed nodes data saved.")
+    except Exception as e:
+        logger.error(f"Failed to save processed nodes data: {e}")
+
+    end_time = time.time()
+    logger.info(f"Execution completed in {end_time - start_time:.2f} seconds.")
+
+    # TODO - Implement composite score
+    # composite_calculator = CompositeScoreCalculator()
+    # nodes_df = composite_calculator.create_composite_score(nodes_df, centrality_columns)
 
     # Step 5: Visualization
     logger.info("Step 5: Visualization")
