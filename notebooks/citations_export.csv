@@ -1,0 +1,21 @@
+Customer,ECLI,Year,Summary,Instance,Domain,N. Cited,N. Citing,Topics,Amount
+John Doe,ECLI:NL:HR:2023:1234,2023,"Dispute over property rights",Supreme Court,Civil Law,5,2,"Property Law, Civil Rights",€5,000
+Jane Smith,ECLI:NL:RBAMS:2022:5678,2022,"Employment contract termination",District Court,Labor Law,3,1,"Employment, Contract Law",€7,500
+Company XYZ,ECLI:NL:GHAMS:2021:9012,2021,"Tax evasion case",Court of Appeal,Tax Law,8,4,"Tax Evasion, Corporate Law",€100,000
+Sarah Johnson,ECLI:NL:HR:2023:3456,2023,"Intellectual property dispute",Supreme Court,Intellectual Property Law,10,6,"Patent Law, Copyright",€25,000
+Michael Brown,ECLI:NL:RBROT:2022:7890,2022,"Personal injury claim",District Court,Tort Law,2,0,"Personal Injury, Negligence",€15,000
+Emma Wilson,ECLI:NL:GHDHA:2021:2345,2021,"Environmental regulation violation",Court of Appeal,Environmental Law,6,3,"Environmental Protection, Administrative Law",€50,000
+David Lee,ECLI:NL:HR:2023:6789,2023,"Constitutional rights case",Supreme Court,Constitutional Law,15,8,"Human Rights, Civil Liberties",€0
+Lisa Chen,ECLI:NL:RBDHA:2022:1234,2022,"Divorce and asset division",District Court,Family Law,1,0,"Divorce, Asset Division",€10,000
+Robert Taylor,ECLI:NL:GHSHE:2021:5678,2021,"Corporate merger dispute",Court of Appeal,Corporate Law,7,2,"Mergers and Acquisitions, Shareholder Rights",€200,000
+Anna Müller,ECLI:NL:HR:2023:9012,2023,"International trade agreement",Supreme Court,International Law,12,5,"Trade Law, International Agreements",€75,000
+Thomas Anderson,ECLI:NL:RBMNE:2022:3456,2022,"Medical malpractice suit",District Court,Medical Law,4,1,"Medical Malpractice, Professional Liability",€30,000
+Sophie Martin,ECLI:NL:GHARL:2021:7890,2021,"Consumer protection case",Court of Appeal,Consumer Law,5,3,"Consumer Rights, Product Liability",€20,000
+James Wilson,ECLI:NL:HR:2023:2345,2023,"Criminal appeal",Supreme Court,Criminal Law,9,4,"Criminal Procedure, Evidence Law",€0
+Elena Rossi,ECLI:NL:RBOBR:2022:6789,2022,"Tenancy dispute",District Court,Housing Law,2,1,"Landlord-Tenant Law, Property Rights",€3,000
+Daniel Kim,ECLI:NL:GHAMS:2021:1234,2021,"Bankruptcy proceedings",Court of Appeal,Insolvency Law,6,2,"Bankruptcy, Creditor Rights",€150,000
+Olivia Brown,ECLI:NL:HR:2023:5678,2023,"Data privacy violation",Supreme Court,Information Law,11,7,"Data Protection, Privacy Rights",€40,000
+Mohammed Al-Fayed,ECLI:NL:RBROT:2022:9012,2022,"Maritime shipping dispute",District Court,Maritime Law,3,1,"Shipping Law, International Trade",€80,000
+Isabella García,ECLI:NL:GHDHA:2021:3456,2021,"Inheritance tax case",Court of Appeal,Inheritance Law,4,2,"Inheritance Tax, Estate Planning",€60,000
+Liam O'Connor,ECLI:NL:HR:2023:7890,2023,"Freedom of speech case",Supreme Court,Constitutional Law,14,9,"Freedom of Speech, Media Law",€0
+Yuki Tanaka,ECLI:NL:RBAMS:2022:2345,2022,"Immigration status appeal",District Court,Immigration Law,2,0,"Immigration, Administrative Law",€5,000
